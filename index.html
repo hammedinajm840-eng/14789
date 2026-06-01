@@ -73,6 +73,7 @@ class="w-full h-full object-cover"
 <div class="mt-6 space-y-4">
 
 <button
+onclick="openAboutPage()"
 class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
 🏠 الرئيسية
 </button>
@@ -558,6 +559,76 @@ return;
 alert('تم حذف الملف بنجاح');
 
 loadFiles();
+
+}
+  /* =========================
+ABOUT PAGE
+========================= */
+
+window.openAboutPage = function(){
+
+subjectsContainer.innerHTML = `
+
+<div class="col-span-full">
+
+<div class="bg-white rounded-[35px] p-10 shadow-2xl text-center">
+
+<img
+src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
+class="w-44 h-44 mx-auto mb-6"
+/>
+
+<h1 class="text-6xl font-black text-blue-700 mb-6">
+منصة نجم الدين همادي
+</h1>
+
+<p class="text-2xl font-bold text-gray-700 leading-loose">
+
+منصة تعليمية مخصصة لتلاميذ المرحلة الابتدائية،
+تهدف إلى تسهيل الوصول إلى الدروس والتمارين والاختبارات
+بطريقة منظمة وسهلة الاستعمال.
+
+</p>
+
+<div class="mt-10 grid md:grid-cols-3 gap-6">
+
+<div class="bg-blue-50 p-6 rounded-3xl">
+<h2 class="text-3xl font-black text-blue-700 mb-4">
+📘 الدروس
+</h2>
+<p class="font-bold text-gray-600">
+جميع الدروس مرتبة حسب المستويات والمواد.
+</p>
+</div>
+
+<div class="bg-yellow-50 p-6 rounded-3xl">
+<h2 class="text-3xl font-black text-yellow-700 mb-4">
+📝 التمارين
+</h2>
+<p class="font-bold text-gray-600">
+تمارين متنوعة لتثبيت المكتسبات.
+</p>
+</div>
+
+<div class="bg-red-50 p-6 rounded-3xl">
+<h2 class="text-3xl font-black text-red-700 mb-4">
+📚 الاختبارات
+</h2>
+<p class="font-bold text-gray-600">
+اختبارات للمراجعة والاستعداد الجيد.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+levelTitle.innerText =
+'✨ مرحبًا بكم ✨';
 
 }
 window.renderSubjects = function(level,btn=null){
