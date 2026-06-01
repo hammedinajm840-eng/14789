@@ -344,8 +344,9 @@ section.querySelector('.files-box');
 filesBox.innerHTML = '';
 
 const level =
-levelTitle.innerText
-.replaceAll('✨','')
+document
+.querySelector('.level-btn.bg-green-600')
+.innerText
 .trim();
 
 const path =
