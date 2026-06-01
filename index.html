@@ -406,7 +406,11 @@ download
 class="bg-green-600 text-white px-3 py-2 rounded-xl text-sm font-bold">
 تحميل
 </a>
-
+<button
+onclick="deleteFile('${filePath}')"
+class="bg-red-600 text-white px-3 py-2 rounded-xl text-sm font-bold">
+حذف
+</button>
 </div>
 
 </div>
@@ -525,7 +529,37 @@ input.click();
 /* =========================
 RENDER
 ========================= */
+/* =========================
+DELETE FILE
+========================= */
 
+window.deleteFile = async function(filePath){
+
+const confirmDelete =
+confirm('هل تريد حذف الملف؟');
+
+if(!confirmDelete) return;
+
+const { error } =
+await supabase.storage
+.from(BUCKET)
+.remove([filePath]);
+
+if(error){
+
+console.error(error);
+
+alert('فشل حذف الملف');
+
+return;
+
+}
+
+alert('تم حذف الملف بنجاح');
+
+loadFiles();
+
+}
 window.renderSubjects = function(level,btn=null){
 
 level =
