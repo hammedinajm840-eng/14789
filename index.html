@@ -39,11 +39,11 @@ display:none;
 
 </head>
 
-<body class="p-4">
+<body class="bg-[#eef3ff]">
 
-<div class="max-w-7xl mx-auto bg-[#edf5f3] rounded-[35px] shadow-2xl overflow-hidden">
+<div class="w-full min-h-screen bg-[#edf5f3] shadow-2xl overflow-hidden">
 
-<div class="grid lg:grid-cols-[250px_1fr]">
+<div class="grid lg:grid-cols-[280px_1fr] min-h-screen">
 
 <!-- SIDEBAR -->
 
@@ -113,27 +113,27 @@ class="w-full border-2 border-blue-200 rounded-2xl px-5 py-4 text-xl outline-non
 
 <div class="flex gap-4 overflow-x-auto hidden-scroll mb-10 pb-2">
 
-<button onclick="renderSubjects('السنة الأولى')" class="bg-green-600 text-white px-7 py-4 rounded-2xl font-black whitespace-nowrap">
+<button onclick="renderSubjects('السنة الأولى',this)" class="level-btn bg-green-600 text-white px-7 py-4 rounded-2xl font-black whitespace-nowrap">
 السنة الأولى
 </button>
 
-<button onclick="renderSubjects('السنة الثانية')" class="bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
+<button onclick="renderSubjects('السنة الثانية',this)" class="level-btn bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
 السنة الثانية
 </button>
 
-<button onclick="renderSubjects('السنة الثالثة')" class="bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
+<button onclick="renderSubjects('السنة الثالثة',this)" class="level-btn bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
 السنة الثالثة
 </button>
 
-<button onclick="renderSubjects('السنة الرابعة')" class="bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
+<button onclick="renderSubjects('السنة الرابعة',this)" class="level-btn bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
 السنة الرابعة
 </button>
 
-<button onclick="renderSubjects('السنة الخامسة')" class="bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
+<button onclick="renderSubjects('السنة الخامسة',this)" class="level-btn bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
 السنة الخامسة
 </button>
 
-<button onclick="renderSubjects('السنة السادسة')" class="bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
+<button onclick="renderSubjects('السنة السادسة',this)" class="level-btn bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
 السنة السادسة
 </button>
 
@@ -143,7 +143,7 @@ class="w-full border-2 border-blue-200 rounded-2xl px-5 py-4 text-xl outline-non
 
 <div
 id="subjects-container"
-class="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+class="grid md:grid-cols-2 xl:grid-cols-3 gap-8 transition-all duration-500">
 </div>
 
 </main>
@@ -235,6 +235,7 @@ const subjectsByLevel = {
 ]
 
 };
+
 /* =========================
 CLEAN TEXT
 ========================= */
@@ -248,6 +249,40 @@ return text
 .replace(/\s+/g,'-')
 .toLowerCase()
 .trim();
+
+}
+
+/* =========================
+SECTION
+========================= */
+
+function createSection(title,color,folder){
+
+let style = {
+blue:{bg:'bg-blue-50',text:'text-blue-700',btn:'bg-blue-700'},
+yellow:{bg:'bg-yellow-50',text:'text-yellow-700',btn:'bg-yellow-700'},
+red:{bg:'bg-red-50',text:'text-red-700',btn:'bg-red-700'}
+}[color];
+
+return `
+<div class="${style.bg} rounded-2xl p-4" data-folder="${folder}">
+
+<div class="flex justify-between items-center">
+
+<h3 class="font-black ${style.text} text-xl">
+${title}
+</h3>
+
+<button class="upload-btn ${style.btn} text-white px-5 py-3 rounded-xl font-bold">
+رفع
+</button>
+
+</div>
+
+<div class="files-box mt-4 space-y-3"></div>
+
+</div>
+`;
 
 }
 
@@ -281,33 +316,6 @@ ${createSection('الاختبارات','red','exams')}
 
 }
 
-function createSection(title,color,folder){
-
-let style = {
-blue:{bg:'bg-blue-50',text:'text-blue-700',btn:'bg-blue-700'},
-yellow:{bg:'bg-yellow-50',text:'text-yellow-700',btn:'bg-yellow-700'},
-red:{bg:'bg-red-50',text:'text-red-700',btn:'bg-red-700'}
-}[color];
-
-return `
-<div class="${style.bg} rounded-2xl p-4" data-folder="${folder}">
-
-<div class="flex justify-between items-center">
-
-<h3 class="font-black ${style.text} text-xl">
-${title}
-</h3>
-
-<button class="upload-btn ${style.btn} text-white px-5 py-3 rounded-xl font-bold">
-رفع
-</button>
-
-</div>
-
-<div class="files-box mt-3 space-y-2"></div>
-
-</div>`;
-}
 /* =========================
 LOAD FILES
 ========================= */
@@ -327,7 +335,7 @@ card.querySelectorAll('[data-folder]');
 
 for(const section of sections){
 
-const folderName =
+const folder =
 section.dataset.folder;
 
 const filesBox =
@@ -341,21 +349,14 @@ levelTitle.innerText
 .trim();
 
 const path =
-${cleanText(level)}/${subject}/${folderName}
+`${cleanText(level)}/${subject}/${folder}`;
+
 const { data, error } =
 await supabase.storage
 .from(BUCKET)
-.list(path, {
-limit: 100,
-offset: 0,
-sortBy: {
-column: 'name',
-order: 'asc'
-}
+.list(path,{
+limit:100
 });
-
-console.log('PATH:', path);
-console.log('FILES:', data);
 
 if(error){
 console.error(error);
@@ -376,7 +377,7 @@ filesBox.innerHTML += `
 
 <div class="bg-white border rounded-2xl p-3 flex justify-between items-center">
 
-<p class="font-bold text-blue-700 text-sm overflow-hidden whitespace-nowrap text-ellipsis max-w-[140px]">
+<p class="font-bold text-blue-700 text-sm overflow-hidden whitespace-nowrap text-ellipsis max-w-[150px]">
 ${file.name}
 </p>
 
@@ -459,7 +460,7 @@ levelTitle.innerText
 .trim();
 
 const path =
-`${cleanText(level)}/${subject}/${folder}/${Date.now()}-${file.name.replace(/[^\w.-]/g,'_')}`
+`${cleanText(level)}/${subject}/${folder}/${Date.now()}-${file.name.replace(/[^\w.-]/g,'_')}`;
 
 const { error } =
 await supabase.storage
@@ -468,8 +469,6 @@ await supabase.storage
 upsert:true,
 contentType:file.type
 });
-
-console.log('UPLOADED:', path);
 
 if(error){
 
@@ -517,14 +516,41 @@ input.click();
 RENDER
 ========================= */
 
-window.renderSubjects = function(level){
+window.renderSubjects = function(level,btn=null){
 
-level = String(level).trim();
+level =
+String(level).trim();
 
 levelTitle.innerText =
 `✨ ${level} ✨`;
 
 subjectsContainer.innerHTML = '';
+
+document
+.querySelectorAll('.level-btn')
+.forEach(b=>{
+
+b.classList.remove(
+'bg-green-600',
+'text-white'
+);
+
+b.classList.add(
+'bg-white'
+);
+
+});
+
+if(btn){
+
+btn.classList.remove('bg-white');
+
+btn.classList.add(
+'bg-green-600',
+'text-white'
+);
+
+}
 
 const search =
 searchInput.value.trim();
@@ -583,6 +609,7 @@ attachUploadEvents();
 loadFiles();
 
 }
+
 /* =========================
 SEARCH
 ========================= */
@@ -608,4 +635,3 @@ renderSubjects('السنة الأولى');
 
 </body>
 </html>
-```
