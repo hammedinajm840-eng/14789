@@ -82,6 +82,12 @@ onclick="openLogin()"
 class="w-full bg-purple-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
 🔐 تسجيل الدخول
 </button>
+  <button
+id="logout-btn"
+onclick="logout()"
+class="hidden w-full bg-red-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
+🚪 تسجيل الخروج
+</button>
 </div>
 
 </aside>
@@ -702,7 +708,9 @@ return;
 }
 
 isAdmin = true;
-
+document
+.getElementById('logout-btn')
+.classList.remove('hidden');
 alert('تم تسجيل الدخول');
 
 renderSubjects('السنة الأولى');
@@ -721,6 +729,22 @@ if(data.session){
 isAdmin = true;
 
 }
+
+  /* LOGOUT */
+
+window.logout = async function(){
+
+await supabase.auth.signOut();
+
+isAdmin = false;
+
+document
+.getElementById('logout-btn')
+.classList.add('hidden');
+
+alert('تم تسجيل الخروج');
+
+renderSubjects('السنة الأولى');
 
 }
 window.renderSubjects = function(level,btn=null){
@@ -846,6 +870,16 @@ renderSubjects(level);
 /* =========================
 START
 ========================= */
+
+await checkUser();
+
+if(isAdmin){
+
+document
+.getElementById('logout-btn')
+.classList.remove('hidden');
+
+}
 
 renderSubjects('السنة الأولى');
 
