@@ -290,11 +290,14 @@ ${title}
 CARD
 ========================= */
 
-function createCard(subject,color,subjectId){
+function createCard(subject,color,subjectId,level){
 
 return `
 
-<div class="card bg-white rounded-[30px] p-6 shadow-xl">
+<div
+class="card bg-white rounded-[30px] p-6 shadow-xl"
+data-level="${cleanText(level)}"
+>
 
 <h2
 data-subject="${subjectId}"
@@ -344,13 +347,10 @@ section.querySelector('.files-box');
 filesBox.innerHTML = '';
 
 const level =
-document
-.querySelector('.level-btn.bg-green-600')
-.innerText
-.trim();
+card.dataset.level;
 
 const path =
-`${cleanText(level)}/${subject}/${folder}`;
+`${level}/${subject}/${folder}`
 
 const { data, error } =
 await supabase.storage
@@ -456,9 +456,9 @@ button.closest('[data-folder]')
 .dataset.folder;
 
 const level =
-levelTitle.innerText
-.replaceAll('✨','')
-.trim();
+button
+.closest('.card')
+.dataset.level;
 
 const path =
 `${cleanText(level)}/${subject}/${folder}/${Date.now()}-${file.name.replace(/[^\w.-]/g,'_')}`;
@@ -600,7 +600,8 @@ subjectsContainer.innerHTML +=
 createCard(
 subject.title,
 color,
-subject.id
+subject.id,
+level
 );
 
 });
