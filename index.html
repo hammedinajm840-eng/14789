@@ -77,7 +77,11 @@ onclick="openAboutPage()"
 class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
 🏠 الرئيسية
 </button>
-
+<button
+onclick="openLogin()"
+class="w-full bg-purple-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
+🔐 تسجيل الدخول
+</button>
 </div>
 
 </aside>
@@ -278,7 +282,7 @@ return `
 ${title}
 </h3>
 
-<button class="upload-btn ${style.btn} text-white px-5 py-3 rounded-xl font-bold">
+<button class="upload-btn ${style.btn} text-white px-5 py-3 rounded-xl font-bold hidden">
 رفع
 </button>
 
@@ -402,11 +406,13 @@ download
 class="bg-green-600 text-white px-3 py-2 rounded-xl text-sm font-bold">
 تحميل
 </a>
+${isAdmin ? `
 <button
 onclick="deleteFile('${filePath}')"
 class="bg-red-600 text-white px-3 py-2 rounded-xl text-sm font-bold">
 حذف
 </button>
+` : ''}
 </div>
 
 </div>
@@ -626,6 +632,97 @@ levelTitle.innerText =
 '✨ مرحبًا بكم ✨';
 
 }
+  /* =========================
+AUTH
+========================= */
+
+let isAdmin = false;
+
+window.openLogin = function(){
+
+subjectsContainer.innerHTML = `
+
+<div class="col-span-full flex justify-center">
+
+<div class="bg-white p-10 rounded-[35px] shadow-2xl w-full max-w-md">
+
+<h1 class="text-5xl font-black text-center text-blue-700 mb-8">
+تسجيل الدخول
+</h1>
+
+<input
+id="email"
+type="email"
+placeholder="البريد الإلكتروني"
+class="w-full border-2 border-blue-200 rounded-2xl p-4 mb-4 font-bold"
+/>
+
+<input
+id="password"
+type="password"
+placeholder="كلمة المرور"
+class="w-full border-2 border-blue-200 rounded-2xl p-4 mb-6 font-bold"
+/>
+
+<button
+onclick="login()"
+class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-xl">
+دخول
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+/* LOGIN */
+
+window.login = async function(){
+
+const email =
+document.getElementById('email').value;
+
+const password =
+document.getElementById('password').value;
+
+const { error } =
+await supabase.auth.signInWithPassword({
+email,
+password
+});
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+isAdmin = true;
+
+alert('تم تسجيل الدخول');
+
+renderSubjects('السنة الأولى');
+
+}
+
+/* CHECK USER */
+
+async function checkUser(){
+
+const { data } =
+await supabase.auth.getSession();
+
+if(data.session){
+
+isAdmin = true;
+
+}
+
+}
 window.renderSubjects = function(level,btn=null){
 
 level =
@@ -716,7 +813,17 @@ level
 });
 
 attachUploadEvents();
+if(isAdmin){
 
+document
+.querySelectorAll('.upload-btn')
+.forEach(btn=>{
+
+btn.classList.remove('hidden');
+
+});
+
+}
 loadFiles();
 
 }
