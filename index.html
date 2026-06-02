@@ -98,13 +98,24 @@ window.onload = function(){
 </script>
 <body>
 
-<div class="fixed top-4 left-4 z-50">
-  <button onclick="changeBackground()"
-    class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg">
-    🎨 تغيير الخلفية
-  </button>
-  <!-- input مخفي لاختيار الصورة -->
-<input type="file" id="bgInput" accept="image/*" hidden>
+<div
+id="bg-btn-container"
+class="hidden mt-4">
+
+<button
+id="changeBgBtn"
+class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
+
+🎨 تغيير الخلفية
+
+</button>
+
+<input
+type="file"
+id="bgInput"
+accept="image/*"
+hidden>
+
 </div>
 
 <div class="w-full min-h-screen bg-[#edf5f3] shadow-2xl overflow-hidden">
@@ -154,9 +165,32 @@ onclick="logout()"
 class="hidden w-full bg-red-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
 🚪 تسجيل الخروج
 </button>
+
+<!-- زر الخلفية -->
+
+<div
+id="bg-btn-container"
+class="hidden mt-4">
+
+<button
+id="changeBgBtn"
+class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
+
+🎨 تغيير الخلفية
+
+</button>
+
+<input
+type="file"
+id="bgInput"
+accept="image/*"
+hidden>
+
 </div>
 
-</aside>
+</div>
+
+</aside>>
 
 <!-- MAIN -->
 
@@ -808,6 +842,9 @@ isAdmin = true;
 document
 .getElementById('logout-btn')
 .classList.remove('hidden');
+    document
+.getElementById('bg-btn-container')
+.classList.remove('hidden');
 alert('تم تسجيل الدخول');
 
 renderSubjects('السنة الأولى');
@@ -842,7 +879,9 @@ isAdmin = false;
 document
 .getElementById('logout-btn')
 .classList.add('hidden');
-
+document
+.getElementById('bg-btn-container')
+.classList.add('hidden');
 alert('تم تسجيل الخروج');
 
 renderSubjects('السنة الأولى');
@@ -985,7 +1024,9 @@ if(isAdmin){
 document
 .getElementById('logout-btn')
 .classList.remove('hidden');
-
+document
+.getElementById('bg-btn-container')
+.classList.remove('hidden');
 }
 
 renderSubjects('السنة الأولى');
