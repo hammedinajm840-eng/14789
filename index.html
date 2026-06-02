@@ -38,14 +38,73 @@ display:none;
 </style>
 
 </head>
+<script>
 
-<body class="bg-[#eef3ff]">
+function changeBackground(){
+
+    document.getElementById("bgInput").click();
+
+}
+
+const bgInput =
+document.getElementById("bgInput");
+
+bgInput.addEventListener("change", function(e){
+
+    const file = e.target.files[0];
+
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(event){
+
+        document.body.style.backgroundImage =
+        `url('${event.target.result}')`;
+
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+        document.body.style.backgroundAttachment = "fixed";
+
+        localStorage.setItem(
+            "siteBackground",
+            event.target.result
+        );
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+/* استرجاع الخلفية بعد تحديث الصفحة */
+
+window.onload = function(){
+
+    const savedBg =
+    localStorage.getItem("siteBackground");
+
+    if(savedBg){
+
+        document.body.style.backgroundImage =
+        `url('${savedBg}')`;
+
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+        document.body.style.backgroundAttachment = "fixed";
+    }
+
+};
+
+</script>
+<body>
 
 <div class="fixed top-4 left-4 z-50">
   <button onclick="changeBackground()"
     class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg">
     🎨 تغيير الخلفية
   </button>
+  <!-- input مخفي لاختيار الصورة -->
+<input type="file" id="bgInput" accept="image/*" hidden>
 </div>
 
 <div class="w-full min-h-screen bg-[#edf5f3] shadow-2xl overflow-hidden">
@@ -935,61 +994,59 @@ renderSubjects('السنة الأولى');
 
 startApp();
 
-</script>
-<script>
+</script><script>
+const changeBgBtn = document.getElementById("changeBgBtn");
+const bgInput = document.getElementById("bgInput");
 
-const backgrounds = [
-  "#eef3ff",
-  "#fff7ed",
-  "#ecfdf5",
-  "#fdf2f8",
-  "#f3f4f6"
-];
+/* عند الضغط على الزر */
+changeBgBtn.addEventListener("click", () => {
+    bgInput.click();
+});
 
-let currentBg = 0;
+/* عند اختيار صورة */
+bgInput.addEventListener("change", (e) => {
 
-function changeBackground(){
+    const file = e.target.files[0];
 
-  currentBg++;
+    if (!file) return;
 
-  if(currentBg >= backgrounds.length){
-    currentBg = 0;
-  }
+    const reader = new FileReader();
 
-  document.body.style.background =
-    backgrounds[currentBg];
+    reader.onload = function(event) {
 
-}
+        document.body.style.backgroundImage =
+            `url('${event.target.result}')`;
 
-</script>
-  <script>
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+        document.body.style.backgroundAttachment = "fixed";
 
-const backgrounds = [
-  "./images/backgrounds/bg1.jpg",
-  "./images/backgrounds/bg2.jpg",
-  "./images/backgrounds/bg3.jpg",
-  "./images/backgrounds/bg4.jpg"
-];
+        /* حفظ الخلفية */
+        localStorage.setItem(
+            "siteBackground",
+            event.target.result
+        );
+    };
 
-let currentBg = -1;
+    reader.readAsDataURL(file);
+});
 
-function changeBackground(){
+/* استرجاع الخلفية بعد تحديث الصفحة */
+window.addEventListener("load", () => {
 
-  currentBg++;
+    const savedBg =
+        localStorage.getItem("siteBackground");
 
-  if(currentBg >= backgrounds.length){
-    currentBg = 0;
-  }
+    if(savedBg){
 
-  document.body.style.backgroundImage =
-    `url('${backgrounds[currentBg]}')`;
+        document.body.style.backgroundImage =
+            `url('${savedBg}')`;
 
-  document.body.style.backgroundSize = "cover";
-  document.body.style.backgroundPosition = "center";
-  document.body.style.backgroundRepeat = "no-repeat";
-  document.body.style.backgroundAttachment = "fixed";
-}
-
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
+        document.body.style.backgroundAttachment = "fixed";
+    }
+});
 </script>
 </body>
   <div class="fixed top-4 left-4 z-50">
