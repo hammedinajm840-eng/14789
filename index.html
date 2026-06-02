@@ -41,6 +41,13 @@ display:none;
 
 <body class="bg-[#eef3ff]">
 
+<div class="fixed top-4 left-4 z-50">
+  <button onclick="changeBackground()"
+    class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg">
+    🎨 تغيير الخلفية
+  </button>
+</div>
+
 <div class="w-full min-h-screen bg-[#edf5f3] shadow-2xl overflow-hidden">
 
 <div class="grid lg:grid-cols-[280px_1fr] min-h-screen">
@@ -907,7 +914,11 @@ START
 ========================= */
 
 async function startApp(){
+document.body.style.backgroundImage =
+  "url('./images/backgrounds/bg1.jpg')";
 
+document.body.style.backgroundSize = "cover";
+document.body.style.backgroundPosition = "center";
 await checkUser();
 
 if(isAdmin){
@@ -925,6 +936,66 @@ renderSubjects('السنة الأولى');
 startApp();
 
 </script>
+<script>
 
+const backgrounds = [
+  "#eef3ff",
+  "#fff7ed",
+  "#ecfdf5",
+  "#fdf2f8",
+  "#f3f4f6"
+];
+
+let currentBg = 0;
+
+function changeBackground(){
+
+  currentBg++;
+
+  if(currentBg >= backgrounds.length){
+    currentBg = 0;
+  }
+
+  document.body.style.background =
+    backgrounds[currentBg];
+
+}
+
+</script>
+  <script>
+
+const backgrounds = [
+  "./images/backgrounds/bg1.jpg",
+  "./images/backgrounds/bg2.jpg",
+  "./images/backgrounds/bg3.jpg",
+  "./images/backgrounds/bg4.jpg"
+];
+
+let currentBg = -1;
+
+function changeBackground(){
+
+  currentBg++;
+
+  if(currentBg >= backgrounds.length){
+    currentBg = 0;
+  }
+
+  document.body.style.backgroundImage =
+    `url('${backgrounds[currentBg]}')`;
+
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundPosition = "center";
+  document.body.style.backgroundRepeat = "no-repeat";
+  document.body.style.backgroundAttachment = "fixed";
+}
+
+</script>
 </body>
+  <div class="fixed top-4 left-4 z-50">
+  <button onclick="changeBackground()"
+    class="bg-blue-600 text-white px-4 py-2 rounded-xl shadow-lg font-bold">
+    🎨 تغيير الخلفية
+  </button>
+</div>
 </html>
