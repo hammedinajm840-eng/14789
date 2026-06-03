@@ -41,26 +41,6 @@ display:none;
 
 <body>
 
-<div
-id="bg-btn-container"
-class="hidden mt-4">
-
-<button
-id="changeBgBtn"
-class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
-
-🎨 تغيير الخلفية
-
-</button>
-
-<input
-type="file"
-id="bgInput"
-accept="image/*"
-hidden>
-
-</div>
-
 <div class="w-full min-h-screen bg-[#edf5f3] shadow-2xl overflow-hidden">
 
 <div class="grid lg:grid-cols-[280px_1fr] min-h-screen">
@@ -458,43 +438,6 @@ class="bg-green-600 text-white px-3 py-2 rounded-xl text-sm font-bold">
 
 });
 
-    filesBox.innerHTML += `
-
-<div class="bg-white border rounded-2xl p-3 flex justify-between items-center">
-
-  <p class="font-bold text-blue-700 text-sm overflow-hidden whitespace-nowrap text-ellipsis max-w-[150px]">
-    ${file.name}
-  </p>
-
-  <div class="flex gap-2">
-
-    <a
-      href="${file.url}"
-      target="_blank"
-      class="bg-blue-600 text-white px-3 py-2 rounded-xl text-sm font-bold">
-      فتح
-    </a>
-
-    <a
-      href="${file.url}"
-      download
-      class="bg-green-600 text-white px-3 py-2 rounded-xl text-sm font-bold">
-      تحميل
-    </a>
-
-  </div>
-
-</div>
-
-`;
-
-});
-
-}
-
-}
-
-}
 
 /* =========================
 UPLOAD
