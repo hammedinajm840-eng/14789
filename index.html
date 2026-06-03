@@ -2,16 +2,11 @@
 <html lang="ar" dir="rtl">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>نجم الدين همادي - منصة تعليمية</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             font-family: 'Cairo', sans-serif;
@@ -23,86 +18,87 @@
         }
 
         .card {
-            transition: .3s;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
         }
 
         .hidden-scroll::-webkit-scrollbar {
             display: none;
         }
-    </style>
 
+        .level-btn {
+            transition: all 0.2s ease;
+        }
+
+        .level-btn:hover {
+            transform: scale(1.03);
+        }
+
+        .sidebar-btn {
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-btn:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease forwards;
+        }
+    </style>
 </head>
 
 <body>
-
     <div class="w-full min-h-screen bg-[#edf5f3] shadow-2xl overflow-hidden">
-
         <div class="grid lg:grid-cols-[280px_1fr] min-h-screen">
 
-            <!-- SIDEBAR -->
-
-            <aside class="bg-[#f5f1de] p-5 border-l">
+            <!-- ===== SIDEBAR ===== -->
+            <aside class="bg-[#f5f1de] p-5 border-l flex flex-col">
 
                 <div class="bg-white rounded-[30px] p-5 shadow-lg text-center">
-
-                    <div
-                        class="w-40 h-40 mx-auto rounded-full overflow-hidden border-[8px] border-yellow-300 shadow-lg">
-
-                        <img src="./images/logo.png.png" class="w-full h-full object-contain">
-
-
+                    <div class="w-40 h-40 mx-auto rounded-full overflow-hidden border-[8px] border-yellow-300 shadow-lg">
+                        <img src="./images/logo.png.png" class="w-full h-full object-contain" alt="شعار المنصة">
                     </div>
-
-                    <h1 class="text-4xl font-black text-blue-700 mt-5">
-                        نجم الدين همادي
-                    </h1>
-
-                    <p class="text-red-500 font-bold mt-3">
-                        التعليم هو مفتاح المستقبل
-                    </p>
-
+                    <h1 class="text-4xl font-black text-blue-700 mt-5">نجم الدين همادي</h1>
+                    <p class="text-red-500 font-bold mt-3">التعليم هو مفتاح المستقبل</p>
                 </div>
 
                 <div class="mt-6 space-y-4">
-
-                    <button onclick="openAboutPage()"
-                        class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
+                    <button onclick="handleOpenAboutPage()"
+                        class="sidebar-btn w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
                         🏠 الرئيسية
                     </button>
-                    <button onclick="openLogin()"
-                        class="w-full bg-purple-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
+                    <button onclick="handleOpenLogin()"
+                        class="sidebar-btn w-full bg-purple-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
                         🔐 تسجيل الدخول
                     </button>
-                    <button id="logout-btn" onclick="logout()"
-                        class="hidden w-full bg-red-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
+                    <button id="logout-btn" onclick="handleLogout()"
+                        class="hidden sidebar-btn w-full bg-red-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
                         🚪 تسجيل الخروج
                     </button>
 
-                    <!-- زر الخلفية -->
-
+                    <!-- زر تغيير الخلفية -->
                     <div id="bg-btn-container" class="hidden mt-4">
-
                         <button id="changeBgBtn"
-                            class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
-
+                            class="sidebar-btn w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">
                             🎨 تغيير الخلفية
-
                         </button>
-
                         <input type="file" id="bgInput" accept="image/*" hidden>
-
                     </div>
-
                 </div>
-
             </aside>
 
-            <!-- MAIN -->
-
+            <!-- ===== MAIN ===== -->
             <main class="p-6">
 
                 <h1 id="level-title" class="text-center text-6xl font-black text-green-700 mb-8">
@@ -110,868 +106,487 @@
                 </h1>
 
                 <!-- SEARCH -->
-
                 <div class="bg-white rounded-[30px] shadow-lg p-4 mb-8">
-
                     <input id="search-input" type="text" placeholder="🔍 ابحث عن مادة..."
                         class="w-full border-2 border-blue-200 rounded-2xl px-5 py-4 text-xl outline-none font-bold" />
-
                 </div>
 
                 <!-- LEVEL BUTTONS -->
-
                 <div class="flex gap-4 overflow-x-auto hidden-scroll mb-10 pb-2">
-
-                    <button onclick="renderSubjects('السنة الأولى',this)"
+                    <button onclick="handleRenderSubjects('السنة الأولى', this)"
                         class="level-btn bg-green-600 text-white px-7 py-4 rounded-2xl font-black whitespace-nowrap">
                         السنة الأولى
                     </button>
-
-                    <button onclick="renderSubjects('السنة الثانية',this)"
+                    <button onclick="handleRenderSubjects('السنة الثانية', this)"
                         class="level-btn bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
                         السنة الثانية
                     </button>
-
-                    <button onclick="renderSubjects('السنة الثالثة',this)"
+                    <button onclick="handleRenderSubjects('السنة الثالثة', this)"
                         class="level-btn bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
                         السنة الثالثة
                     </button>
-
-                    <button onclick="renderSubjects('السنة الرابعة',this)"
+                    <button onclick="handleRenderSubjects('السنة الرابعة', this)"
                         class="level-btn bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
                         السنة الرابعة
                     </button>
-
-                    <button onclick="renderSubjects('السنة الخامسة',this)"
+                    <button onclick="handleRenderSubjects('السنة الخامسة', this)"
                         class="level-btn bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
                         السنة الخامسة
                     </button>
-
-                    <button onclick="renderSubjects('السنة السادسة',this)"
+                    <button onclick="handleRenderSubjects('السنة السادسة', this)"
                         class="level-btn bg-white shadow px-7 py-4 rounded-2xl font-black whitespace-nowrap">
                         السنة السادسة
                     </button>
-
                 </div>
 
                 <!-- SUBJECTS -->
-
                 <div id="subjects-container"
                     class="grid md:grid-cols-2 xl:grid-cols-3 gap-8 transition-all duration-500">
                 </div>
 
             </main>
-
         </div>
-
     </div>
 
+    <!-- ===== MODULE SCRIPT ===== -->
     <script type="module">
 
-        import { createClient }
-            from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        /* =========================
-        SUPABASE
-        ========================= */
+        /* ── Supabase ── */
+        const SUPABASE_URL = 'https://wsrwidfvcrmppayfbqel.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_ujQvwUEUXp7_-enFhO2awQ_hoJHa6Mg';
+        const BUCKET      = 'school-files';
 
-        const SUPABASE_URL =
-            'https://wsrwidfvcrmppayfbqel.supabase.co';
+        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        const SUPABASE_KEY =
-            'sb_publishable_ujQvwUEUXp7_-enFhO2awQ_hoJHa6Mg';
+        /* ── DOM ── */
+        const subjectsContainer = document.getElementById('subjects-container');
+        const levelTitle        = document.getElementById('level-title');
+        const searchInput       = document.getElementById('search-input');
 
-        const BUCKET = 'school-files';
-
-        const supabase =
-            createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
-            );
-
-        /* =========================
-        ELEMENTS
-        ========================= */
-
-        const subjectsContainer =
-            document.getElementById('subjects-container');
-
-        const levelTitle =
-            document.getElementById('level-title');
-
-        const searchInput =
-            document.getElementById('search-input');
-
-        /* =========================
-        SUBJECTS
-        ========================= */
-
+        /* ── Data ── */
         const subjectsByLevel = {
-
-            'السنة الأولى': [
-                { title: 'الرياضيات', id: 'math' },
-                { title: 'اللغة العربية', id: 'arabic' },
-                { title: 'الإيقاظ العلمي', id: 'science' }
-            ],
-
-            'السنة الثانية': [
-                { title: 'الرياضيات', id: 'math' },
-                { title: 'اللغة العربية', id: 'arabic' },
-                { title: 'الإيقاظ العلمي', id: 'science' }
-            ],
-
-            'السنة الثالثة': [
-                { title: 'الرياضيات', id: 'math' },
-                { title: 'اللغة العربية', id: 'arabic' },
-                { title: 'الفرنسية', id: 'french' },
-                { title: 'الإيقاظ العلمي', id: 'science' }
-            ],
-
-            'السنة الرابعة': [
-                { title: 'الرياضيات', id: 'math' },
-                { title: 'اللغة العربية', id: 'arabic' },
-                { title: 'الفرنسية', id: 'french' },
-                { title: 'الإيقاظ العلمي', id: 'science' }
-            ],
-
-            'السنة الخامسة': [
-                { title: 'الرياضيات', id: 'math' },
-                { title: 'اللغة العربية', id: 'arabic' },
-                { title: 'الفرنسية', id: 'french' },
-                { title: 'الإيقاظ العلمي', id: 'science' }
-            ],
-
-            'السنة السادسة': [
-                { title: 'الرياضيات', id: 'math' },
-                { title: 'اللغة العربية', id: 'arabic' },
-                { title: 'الفرنسية', id: 'french' },
-                { title: 'الإيقاظ العلمي', id: 'science' }
-            ]
-
+            'السنة الأولى':  [{ title: 'الرياضيات', id: 'math' }, { title: 'اللغة العربية', id: 'arabic' }, { title: 'الإيقاظ العلمي', id: 'science' }],
+            'السنة الثانية': [{ title: 'الرياضيات', id: 'math' }, { title: 'اللغة العربية', id: 'arabic' }, { title: 'الإيقاظ العلمي', id: 'science' }],
+            'السنة الثالثة': [{ title: 'الرياضيات', id: 'math' }, { title: 'اللغة العربية', id: 'arabic' }, { title: 'الفرنسية', id: 'french' }, { title: 'الإيقاظ العلمي', id: 'science' }],
+            'السنة الرابعة': [{ title: 'الرياضيات', id: 'math' }, { title: 'اللغة العربية', id: 'arabic' }, { title: 'الفرنسية', id: 'french' }, { title: 'الإيقاظ العلمي', id: 'science' }],
+            'السنة الخامسة': [{ title: 'الرياضيات', id: 'math' }, { title: 'اللغة العربية', id: 'arabic' }, { title: 'الفرنسية', id: 'french' }, { title: 'الإيقاظ العلمي', id: 'science' }],
+            'السنة السادسة': [{ title: 'الرياضيات', id: 'math' }, { title: 'اللغة العربية', id: 'arabic' }, { title: 'الفرنسية', id: 'french' }, { title: 'الإيقاظ العلمي', id: 'science' }],
         };
-        const levelMap = {
 
-            'السنة الأولى': 'level1',
+        const levelMap = {
+            'السنة الأولى':  'level1',
             'السنة الثانية': 'level2',
             'السنة الثالثة': 'level3',
             'السنة الرابعة': 'level4',
             'السنة الخامسة': 'level5',
-            'السنة السادسة': 'level6'
-
+            'السنة السادسة': 'level6',
         };
-        /* =========================
-        CLEAN TEXT
-        ========================= */
 
-        function cleanText(text) {
+        /* ── State ── */
+        let isAdmin = false;
+        let currentLevel = 'السنة الأولى';
 
-            return text
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, '')
-                .replace(/[^\w\s-]/g, '')
-                .replace(/\s+/g, '-')
-                .toLowerCase()
-                .trim();
-
-        }
-
-        /* =========================
-        SECTION
-        ========================= */
+        /* ══════════════════════════════
+           HELPERS
+        ══════════════════════════════ */
 
         function createSection(title, color, folder) {
-
-            let style = {
-                blue: { bg: 'bg-blue-50', text: 'text-blue-700', btn: 'bg-blue-700' },
-                yellow: { bg: 'bg-yellow-50', text: 'text-yellow-700', btn: 'bg-yellow-700' },
-                red: { bg: 'bg-red-50', text: 'text-red-700', btn: 'bg-red-700' }
-            }[color];
-
+            const styles = {
+                blue:   { bg: 'bg-blue-50',   text: 'text-blue-700',   btn: 'bg-blue-700'   },
+                yellow: { bg: 'bg-yellow-50',  text: 'text-yellow-700', btn: 'bg-yellow-700' },
+                red:    { bg: 'bg-red-50',     text: 'text-red-700',    btn: 'bg-red-700'    },
+            };
+            const s = styles[color];
             return `
-<div class="${style.bg} rounded-2xl p-4" data-folder="${folder}">
-
-<div class="flex justify-between items-center">
-
-<h3 class="font-black ${style.text} text-xl">
-${title}
-</h3>
-
-<button class="upload-btn ${style.btn} text-white px-5 py-3 rounded-xl font-bold hidden">
-رفع
-</button>
-
-</div>
-
-<div class="files-box mt-4 space-y-3"></div>
-
-</div>
-`;
-
+                <div class="${s.bg} rounded-2xl p-4" data-folder="${folder}">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-black ${s.text} text-xl">${title}</h3>
+                        <button class="upload-btn ${s.btn} text-white px-5 py-3 rounded-xl font-bold hidden">
+                            رفع
+                        </button>
+                    </div>
+                    <div class="files-box mt-4 space-y-3"></div>
+                </div>`;
         }
-
-        /* =========================
-        CARD
-        ========================= */
 
         function createCard(subject, color, subjectId, level) {
-
             return `
-
-<div
-class="card bg-white rounded-[30px] p-6 shadow-xl"
-data-level="${levelMap[level]}"
->
-
-<h2
-data-subject="${subjectId}"
-class="text-5xl font-black ${color} mb-6">
-${subject}
-</h2>
-
-<div class="space-y-4">
-
-${createSection('الدروس', 'blue', 'lessons')}
-${createSection('التمارين', 'yellow', 'exercises')}
-${createSection('الاختبارات', 'red', 'exams')}
-
-</div>
-
-</div>
-
-`;
-
+                <div class="card fade-in bg-white rounded-[30px] p-6 shadow-xl" data-level="${levelMap[level]}">
+                    <h2 data-subject="${subjectId}" class="text-5xl font-black ${color} mb-6">${subject}</h2>
+                    <div class="space-y-4">
+                        ${createSection('الدروس',     'blue',   'lessons')}
+                        ${createSection('التمارين',   'yellow', 'exercises')}
+                        ${createSection('الاختبارات', 'red',    'exams')}
+                    </div>
+                </div>`;
         }
 
-        /* =========================
-        LOAD FILES
-        ========================= */
+        /* ══════════════════════════════
+           LOAD FILES
+        ══════════════════════════════ */
 
         async function loadFiles() {
-
-            const cards =
-                document.querySelectorAll('.card');
+            const cards = document.querySelectorAll('.card');
 
             for (const card of cards) {
-
-                const subject =
-                    card.querySelector('h2').dataset.subject;
-
-                const sections =
-                    card.querySelectorAll('[data-folder]');
+                const subject  = card.querySelector('h2').dataset.subject;
+                const level    = card.dataset.level;
+                const sections = card.querySelectorAll('[data-folder]');
 
                 for (const section of sections) {
-
-                    const folder =
-                        section.dataset.folder;
-
-                    const filesBox =
-                        section.querySelector('.files-box');
-
+                    const folder   = section.dataset.folder;
+                    const filesBox = section.querySelector('.files-box');
                     filesBox.innerHTML = '';
 
-                    const level =
-                        card.dataset.level;
+                    const { data, error } = await supabase
+                        .from('files')
+                        .select('*')
+                        .eq('level',   level)
+                        .eq('subject', subject)
+                        .eq('folder',  folder);
 
-                    const path =
-                        `${level}/${subject}/${folder}`;
-
-                    const { data, error } =
-                        await supabase
-                            .from('files')
-                            .select('*')
-                            .eq('level', level)
-                            .eq('subject', subject)
-                            .eq('folder', folder);
-
-                    if (error) {
-                        console.error(error);
-                        continue;
-                    }
+                    if (error) { console.error(error); continue; }
 
                     (data || []).forEach(file => {
-
+                        const deleteBtn = isAdmin
+                            ? `<button onclick="handleDeleteFile('${file.id}', '${file.storage_path || ''}')"
+                                class="bg-red-500 text-white px-3 py-2 rounded-xl text-sm font-bold">حذف</button>`
+                            : '';
 
                         filesBox.innerHTML += `
-
-<div class="bg-white border rounded-2xl p-3 flex justify-between items-center">
-
-<p class="font-bold text-blue-700 text-sm overflow-hidden whitespace-nowrap text-ellipsis max-w-[150px]">
-${file.name}
-</p>
-
-<div class="flex gap-2">
-
-<a
-href="${file.url}"
-target="_blank"
-class="bg-blue-600 text-white px-3 py-2 rounded-xl text-sm font-bold">
-فتح
-</a>
-
-<a
-href="${file.url}"
-target="_blank"
-class="bg-green-600 text-white px-3 py-2 rounded-xl text-sm font-bold">
-تحميل
-</a>
-
-</div>
-
-</div>
-
-`;
-
+                            <div class="bg-white border rounded-2xl p-3 flex justify-between items-center gap-2">
+                                <p class="font-bold text-blue-700 text-sm overflow-hidden whitespace-nowrap text-ellipsis max-w-[140px]"
+                                   title="${file.name}">${file.name}</p>
+                                <div class="flex gap-2 flex-shrink-0">
+                                    <a href="${file.url}" target="_blank" rel="noopener"
+                                       class="bg-blue-600 text-white px-3 py-2 rounded-xl text-sm font-bold">فتح</a>
+                                    <a href="${file.url}" download="${file.name}" target="_blank" rel="noopener"
+                                       class="bg-green-600 text-white px-3 py-2 rounded-xl text-sm font-bold">تحميل</a>
+                                    ${deleteBtn}
+                                </div>
+                            </div>`;
                     });
-
                 }
-
             }
-
         }
-        /* =========================
-        UPLOAD
-        ========================= */
+
+        /* ══════════════════════════════
+           UPLOAD
+        ══════════════════════════════ */
 
         function attachUploadEvents() {
+            document.querySelectorAll('.upload-btn').forEach(button => {
+                // إزالة أي مستمع قديم بنسخ الزر
+                const freshBtn = button.cloneNode(true);
+                button.parentNode.replaceChild(freshBtn, button);
 
-            document
-                .querySelectorAll('.upload-btn')
-                .forEach(button => {
+                freshBtn.addEventListener('click', () => {
+                    const input = document.createElement('input');
+                    input.type   = 'file';
+                    input.accept = '.pdf,.doc,.docx,.png,.jpg,.jpeg,.mp4';
 
-                    button.onclick = null;
+                    input.onchange = async (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
 
-                    button.addEventListener('click', () => {
+                        freshBtn.disabled  = true;
+                        freshBtn.innerText = 'جاري الرفع...';
 
-                        const input =
-                            document.createElement('input');
+                        try {
+                            const subject = freshBtn.closest('.card').querySelector('h2').dataset.subject;
+                            const folder  = freshBtn.closest('[data-folder]').dataset.folder;
+                            const level   = freshBtn.closest('.card').dataset.level;
+                            const path    = `${level}/${subject}/${folder}/${Date.now()}-${file.name}`;
 
-                        input.type = 'file';
+                            const { error: uploadError } = await supabase.storage
+                                .from(BUCKET)
+                                .upload(path, file, { upsert: true, contentType: file.type });
 
-                        input.accept =
-                            '.pdf,.doc,.docx,.png,.jpg,.jpeg,.mp4';
-
-                        input.onchange = async (e) => {
-
-                            const file =
-                                e.target.files[0];
-                            const file = e.target.files[0];
-
-                            if (!file) return;
-
-                            const safeFileName = file.name;
-
-                            button.disabled = true;
-                            button.innerText = 'جاري الرفع...';
-
-                            try {
-
-                                const subject =
-                                    button.closest('.card')
-                                        .querySelector('h2')
-                                        .dataset.subject;
-
-                                const folder =
-                                    button.closest('[data-folder]')
-                                        .dataset.folder;
-
-                                const level =
-                                    button
-                                        .closest('.card')
-                                        .dataset.level;
-
-                                const safeFileName =
-                                    file.name;
-
-                                const path =
-                                    `${level}/${subject}/${folder}/${Date.now()}-${safeFileName}`;
-
-                                const { data: uploadData, error } =
-                                    await supabase.storage
-                                        .from(BUCKET)
-                                        .upload(path, file, {
-                                            upsert: true,
-                                            contentType: file.type
-                                        });
-
-                                if (error) {
-                                    console.error(error);
-                                    alert(error.message);
-                                    button.disabled = false;
-                                    button.innerText = 'رفع';
-                                    return;
-                                }
-
-                                const { data: publicUrlData } =
-                                    supabase.storage
-                                        .from(BUCKET)
-                                        .getPublicUrl(path);
-
-                                await supabase
-                                    .from('files')
-                                    .insert([{
-                                        name: file.name,
-                                        url: publicUrlData.publicUrl,
-                                        level,
-                                        subject,
-                                        folder
-                                    }]);
-
-                                alert('تم رفع الملف بنجاح');
-
-                                button.disabled = false;
-                                button.innerText = 'رفع';
-
-                                loadFiles();
-
-                            }
-                            catch (err) {
-
-                                console.error(err);
-
-                                alert('فشل رفع الملف');
-
-                                button.disabled = false;
-                                button.innerText = 'رفع';
-
+                            if (uploadError) {
+                                alert('فشل رفع الملف: ' + uploadError.message);
+                                return;
                             }
 
-                        };
+                            const { data: publicUrlData } = supabase.storage
+                                .from(BUCKET)
+                                .getPublicUrl(path);
 
-                        input.click();
+                            const { error: dbError } = await supabase.from('files').insert([{
+                                name:         file.name,
+                                url:          publicUrlData.publicUrl,
+                                storage_path: path,
+                                level,
+                                subject,
+                                folder,
+                            }]);
 
-                    });
+                            if (dbError) {
+                                alert('تم رفع الملف لكن فشل حفظه في قاعدة البيانات: ' + dbError.message);
+                                return;
+                            }
 
+                            alert('✅ تم رفع الملف بنجاح');
+                            loadFiles();
+
+                        } catch (err) {
+                            console.error(err);
+                            alert('حدث خطأ غير متوقع أثناء الرفع');
+                        } finally {
+                            freshBtn.disabled  = false;
+                            freshBtn.innerText = 'رفع';
+                        }
+                    };
+
+                    input.click();
                 });
-
+            });
         }
 
-        /* =========================
-        RENDER
-        ========================= */
-        /* =========================
-        DELETE FILE
-        ========================= */
+        /* ══════════════════════════════
+           DELETE FILE
+        ══════════════════════════════ */
 
-        window.deleteFile = async function (filePath) {
+        window.handleDeleteFile = async function(fileId, storagePath) {
+            if (!confirm('هل تريد حذف هذا الملف نهائيًا؟')) return;
 
-            const confirmDelete =
-                confirm('هل تريد حذف الملف؟');
-
-            if (!confirmDelete) return;
-
-            const { error } =
-                await supabase.storage
+            // حذف من التخزين إن وُجد المسار
+            if (storagePath) {
+                const { error: storageError } = await supabase.storage
                     .from(BUCKET)
-                    .remove([filePath]);
-
-            if (error) {
-
-                console.error(error);
-
-                alert('فشل حذف الملف');
-
-                return;
-
+                    .remove([storagePath]);
+                if (storageError) console.warn('تحذير: فشل حذف الملف من التخزين', storageError);
             }
 
-            alert('تم حذف الملف بنجاح');
+            // حذف من قاعدة البيانات
+            const { error: dbError } = await supabase
+                .from('files')
+                .delete()
+                .eq('id', fileId);
 
+            if (dbError) {
+                alert('فشل حذف الملف: ' + dbError.message);
+                return;
+            }
+
+            alert('✅ تم حذف الملف بنجاح');
             loadFiles();
+        };
 
-        }
-        /* =========================
-      ABOUT PAGE
-      ========================= */
+        /* ══════════════════════════════
+           RENDER SUBJECTS
+        ══════════════════════════════ */
 
-        window.openAboutPage = function () {
+        function renderSubjects(level, btn = null) {
+            level = String(level).trim();
+            currentLevel = level;
 
-            subjectsContainer.innerHTML = `
-
-<div class="col-span-full">
-
-<div class="bg-white rounded-[35px] p-10 shadow-2xl text-center">
-
-<img
-src="./images/logo.png.png"
-class="w-56 h-56 mx-auto mb-6 object-contain"
-/>
-
-<h1 class="text-6xl font-black text-blue-700 mb-6">
-منصة نجم الدين همادي
-</h1>
-
-<p class="text-2xl font-bold text-gray-700 leading-loose">
-
-منصة تعليمية مخصصة لتلاميذ المرحلة الابتدائية،
-تهدف إلى تسهيل الوصول إلى الدروس والتمارين والاختبارات
-بطريقة منظمة وسهلة الاستعمال.
-
-</p>
-
-<div class="mt-10 grid md:grid-cols-3 gap-6">
-
-<div class="bg-blue-50 p-6 rounded-3xl">
-<h2 class="text-3xl font-black text-blue-700 mb-4">
-📘 الدروس
-</h2>
-<p class="font-bold text-gray-600">
-جميع الدروس مرتبة حسب المستويات والمواد.
-</p>
-</div>
-
-<div class="bg-yellow-50 p-6 rounded-3xl">
-<h2 class="text-3xl font-black text-yellow-700 mb-4">
-📝 التمارين
-</h2>
-<p class="font-bold text-gray-600">
-تمارين متنوعة لتثبيت المكتسبات.
-</p>
-</div>
-
-<div class="bg-red-50 p-6 rounded-3xl">
-<h2 class="text-3xl font-black text-red-700 mb-4">
-📚 الاختبارات
-</h2>
-<p class="font-bold text-gray-600">
-اختبارات للمراجعة والاستعداد الجيد.
-</p>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-            levelTitle.innerText =
-                '✨ مرحبًا بكم ✨';
-
-        }
-        /* =========================
-      AUTH
-      ========================= */
-
-        let isAdmin = false;
-
-        window.openLogin = function () {
-
-            subjectsContainer.innerHTML = `
-
-<div class="col-span-full flex justify-center">
-
-<div class="bg-white p-10 rounded-[35px] shadow-2xl w-full max-w-md">
-
-<h1 class="text-5xl font-black text-center text-blue-700 mb-8">
-تسجيل الدخول
-</h1>
-
-<input
-id="email"
-type="email"
-placeholder="البريد الإلكتروني"
-class="w-full border-2 border-blue-200 rounded-2xl p-4 mb-4 font-bold"
-/>
-
-<input
-id="password"
-type="password"
-placeholder="كلمة المرور"
-class="w-full border-2 border-blue-200 rounded-2xl p-4 mb-6 font-bold"
-/>
-
-<button
-onclick="login()"
-class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-xl">
-دخول
-</button>
-
-</div>
-
-</div>
-
-`;
-
-        }
-
-        /* LOGIN */
-
-        window.login = async function () {
-
-            const email =
-                document.getElementById('email').value;
-
-            const password =
-                document.getElementById('password').value;
-
-            const { error } =
-                await supabase.auth.signInWithPassword({
-                    email,
-                    password
-                });
-
-            if (error) {
-
-                alert(error.message);
-                return;
-
-            }
-
-            isAdmin = true;
-            document
-                .getElementById('logout-btn')
-                .classList.remove('hidden');
-            document
-                .getElementById('bg-btn-container')
-                .classList.remove('hidden');
-            alert('تم تسجيل الدخول');
-
-            renderSubjects('السنة الأولى');
-
-        }
-
-        /* CHECK USER */
-
-        /* CHECK USER */
-
-        async function checkUser() {
-
-            const { data } =
-                await supabase.auth.getSession();
-
-            if (data.session) {
-
-                isAdmin = true;
-
-            }
-
-        }
-
-        /* LOGOUT */
-
-        window.logout = async function () {
-
-            await supabase.auth.signOut();
-
-            isAdmin = false;
-
-            document
-                .getElementById('logout-btn')
-                .classList.add('hidden');
-            document
-                .getElementById('bg-btn-container')
-                .classList.add('hidden');
-            alert('تم تسجيل الخروج');
-
-            renderSubjects('السنة الأولى');
-
-        }
-        window.renderSubjects = function (level, btn = null) {
-
-            level =
-                String(level).trim();
-
-            levelTitle.innerText =
-                `✨ ${level} ✨`;
-
+            levelTitle.innerText = `✨ ${level} ✨`;
             subjectsContainer.innerHTML = '';
 
-            document
-                .querySelectorAll('.level-btn')
-                .forEach(b => {
-
-                    b.classList.remove(
-                        'bg-green-600',
-                        'text-white'
-                    );
-
-                    b.classList.add(
-                        'bg-white'
-                    );
-
-                });
-
+            // تحديث أزرار المستويات
+            document.querySelectorAll('.level-btn').forEach(b => {
+                b.classList.remove('bg-green-600', 'text-white');
+                b.classList.add('bg-white');
+            });
             if (btn) {
-
                 btn.classList.remove('bg-white');
-
-                btn.classList.add(
-                    'bg-green-600',
-                    'text-white'
-                );
-
+                btn.classList.add('bg-green-600', 'text-white');
             }
 
-            const search =
-                searchInput.value.trim();
-
-            const subjects =
-                (subjectsByLevel[level] || [])
-                    .filter(subject =>
-                        subject.title.includes(search)
-                    );
+            const search   = searchInput.value.trim();
+            const subjects = (subjectsByLevel[level] || [])
+                .filter(s => s.title.includes(search));
 
             if (subjects.length === 0) {
-
                 subjectsContainer.innerHTML = `
-<div class="col-span-full text-center">
-<h2 class="text-4xl font-black text-red-500">
-لا توجد مواد
-</h2>
-</div>
-`;
-
+                    <div class="col-span-full text-center">
+                        <h2 class="text-4xl font-black text-red-500">لا توجد مواد</h2>
+                    </div>`;
                 return;
-
             }
 
+            const colorMap = {
+                math:    'text-indigo-700',
+                arabic:  'text-green-700',
+                science: 'text-orange-700',
+                french:  'text-pink-700',
+            };
+
             subjects.forEach(subject => {
-
-                let color = 'text-blue-700';
-
-                if (subject.id === 'math') {
-                    color = 'text-indigo-700';
-                }
-
-                if (subject.id === 'arabic') {
-                    color = 'text-green-700';
-                }
-
-                if (subject.id === 'science') {
-                    color = 'text-orange-700';
-                }
-
-                if (subject.id === 'french') {
-                    color = 'text-pink-700';
-                }
-
-                subjectsContainer.innerHTML +=
-                    createCard(
-                        subject.title,
-                        color,
-                        subject.id,
-                        level
-                    );
-
+                const color = colorMap[subject.id] || 'text-blue-700';
+                subjectsContainer.innerHTML += createCard(subject.title, color, subject.id, level);
             });
 
             attachUploadEvents();
+
             if (isAdmin) {
-
-                document
-                    .querySelectorAll('.upload-btn')
-                    .forEach(btn => {
-
-                        btn.classList.remove('hidden');
-
-                    });
-
+                document.querySelectorAll('.upload-btn').forEach(b => b.classList.remove('hidden'));
             }
-            loadFiles();
 
+            loadFiles();
         }
 
-        /* =========================
-        SEARCH
-        ========================= */
+        /* ══════════════════════════════
+           ABOUT PAGE
+        ══════════════════════════════ */
 
+        function openAboutPage() {
+            levelTitle.innerText = '✨ مرحبًا بكم ✨';
+            subjectsContainer.innerHTML = `
+                <div class="col-span-full fade-in">
+                    <div class="bg-white rounded-[35px] p-10 shadow-2xl text-center">
+                        <img src="./images/logo.png.png" class="w-56 h-56 mx-auto mb-6 object-contain" alt="شعار" />
+                        <h1 class="text-6xl font-black text-blue-700 mb-6">منصة نجم الدين همادي</h1>
+                        <p class="text-2xl font-bold text-gray-700 leading-loose">
+                            منصة تعليمية مخصصة لتلاميذ المرحلة الابتدائية،
+                            تهدف إلى تسهيل الوصول إلى الدروس والتمارين والاختبارات
+                            بطريقة منظمة وسهلة الاستعمال.
+                        </p>
+                        <div class="mt-10 grid md:grid-cols-3 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-3xl">
+                                <h2 class="text-3xl font-black text-blue-700 mb-4">📘 الدروس</h2>
+                                <p class="font-bold text-gray-600">جميع الدروس مرتبة حسب المستويات والمواد.</p>
+                            </div>
+                            <div class="bg-yellow-50 p-6 rounded-3xl">
+                                <h2 class="text-3xl font-black text-yellow-700 mb-4">📝 التمارين</h2>
+                                <p class="font-bold text-gray-600">تمارين متنوعة لتثبيت المكتسبات.</p>
+                            </div>
+                            <div class="bg-red-50 p-6 rounded-3xl">
+                                <h2 class="text-3xl font-black text-red-700 mb-4">📚 الاختبارات</h2>
+                                <p class="font-bold text-gray-600">اختبارات للمراجعة والاستعداد الجيد.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        /* ══════════════════════════════
+           AUTH
+        ══════════════════════════════ */
+
+        function openLogin() {
+            levelTitle.innerText = '🔐 تسجيل الدخول';
+            subjectsContainer.innerHTML = `
+                <div class="col-span-full flex justify-center fade-in">
+                    <div class="bg-white p-10 rounded-[35px] shadow-2xl w-full max-w-md">
+                        <h1 class="text-5xl font-black text-center text-blue-700 mb-8">تسجيل الدخول</h1>
+                        <input id="email" type="email" placeholder="البريد الإلكتروني"
+                            class="w-full border-2 border-blue-200 rounded-2xl p-4 mb-4 font-bold" />
+                        <input id="password" type="password" placeholder="كلمة المرور"
+                            class="w-full border-2 border-blue-200 rounded-2xl p-4 mb-6 font-bold" />
+                        <button onclick="handleLogin()"
+                            class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-xl hover:bg-green-700 transition-colors">
+                            دخول
+                        </button>
+                    </div>
+                </div>`;
+        }
+
+        async function login() {
+            const email    = document.getElementById('email')?.value;
+            const password = document.getElementById('password')?.value;
+
+            if (!email || !password) {
+                alert('يرجى إدخال البريد الإلكتروني وكلمة المرور');
+                return;
+            }
+
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+            if (error) {
+                alert('فشل تسجيل الدخول: ' + error.message);
+                return;
+            }
+
+            isAdmin = true;
+            document.getElementById('logout-btn').classList.remove('hidden');
+            document.getElementById('bg-btn-container').classList.remove('hidden');
+            alert('✅ تم تسجيل الدخول بنجاح');
+            renderSubjects('السنة الأولى');
+        }
+
+        async function logout() {
+            await supabase.auth.signOut();
+            isAdmin = false;
+            document.getElementById('logout-btn').classList.add('hidden');
+            document.getElementById('bg-btn-container').classList.add('hidden');
+            alert('تم تسجيل الخروج');
+            renderSubjects('السنة الأولى');
+        }
+
+        async function checkUser() {
+            const { data } = await supabase.auth.getSession();
+            if (data.session) isAdmin = true;
+        }
+
+        /* ══════════════════════════════
+           EXPOSE TO GLOBAL (onclick في HTML)
+        ══════════════════════════════ */
+        window.handleOpenAboutPage = openAboutPage;
+        window.handleOpenLogin     = openLogin;
+        window.handleLogin         = login;
+        window.handleLogout        = logout;
+        window.handleRenderSubjects = renderSubjects;
+
+        /* ══════════════════════════════
+           SEARCH
+        ══════════════════════════════ */
         searchInput.addEventListener('input', () => {
-
-            const level =
-                levelTitle.innerText
-                    .replaceAll('✨', '')
-                    .trim();
-
-            renderSubjects(level);
-
+            renderSubjects(currentLevel);
         });
 
-        /* =========================
-        START
-        ========================= */
-
+        /* ══════════════════════════════
+           START
+        ══════════════════════════════ */
         async function startApp() {
-            document.body.style.backgroundImage =
-                "url('./images/backgrounds/bg1.jpg')";
+            // استرجاع الخلفية المحفوظة
+            const savedBg = localStorage.getItem('siteBackground');
+            if (savedBg) {
+                document.body.style.backgroundImage    = `url('${savedBg}')`;
+                document.body.style.backgroundSize     = 'cover';
+                document.body.style.backgroundPosition = 'center';
+                document.body.style.backgroundAttachment = 'fixed';
+            }
 
-            document.body.style.backgroundSize = "cover";
-            document.body.style.backgroundPosition = "center";
             await checkUser();
 
             if (isAdmin) {
-
-                document
-                    .getElementById('logout-btn')
-                    .classList.remove('hidden');
-                document
-                    .getElementById('bg-btn-container')
-                    .classList.remove('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
+                document.getElementById('bg-btn-container').classList.remove('hidden');
             }
 
             renderSubjects('السنة الأولى');
-
         }
 
         startApp();
 
     </script>
+
+    <!-- ===== BACKGROUND SCRIPT (لا يحتاج module) ===== -->
     <script>
-        const changeBgBtn = document.getElementById("changeBgBtn");
-        const bgInput = document.getElementById("bgInput");
+        const changeBgBtn = document.getElementById('changeBgBtn');
+        const bgInput     = document.getElementById('bgInput');
 
-        /* عند الضغط على الزر */
-        changeBgBtn.addEventListener("click", () => {
-            bgInput.click();
-        });
+        changeBgBtn.addEventListener('click', () => bgInput.click());
 
-        /* عند اختيار صورة */
-        bgInput.addEventListener("change", (e) => {
-
+        bgInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
-
             if (!file) return;
 
             const reader = new FileReader();
-
             reader.onload = function (event) {
-
-                document.body.style.backgroundImage =
-                    `url('${event.target.result}')`;
-
-                document.body.style.backgroundSize = "cover";
-                document.body.style.backgroundPosition = "center";
-                document.body.style.backgroundAttachment = "fixed";
-
-                /* حفظ الخلفية */
-                localStorage.setItem(
-                    "siteBackground",
-                    event.target.result
-                );
+                const url = event.target.result;
+                document.body.style.backgroundImage      = `url('${url}')`;
+                document.body.style.backgroundSize       = 'cover';
+                document.body.style.backgroundPosition   = 'center';
+                document.body.style.backgroundAttachment = 'fixed';
+                localStorage.setItem('siteBackground', url);
             };
-
             reader.readAsDataURL(file);
-        });
-
-        /* استرجاع الخلفية بعد تحديث الصفحة */
-        window.addEventListener("load", () => {
-
-            const savedBg =
-                localStorage.getItem("siteBackground");
-
-            if (savedBg) {
-
-                document.body.style.backgroundImage =
-                    `url('${savedBg}')`;
-
-                document.body.style.backgroundSize = "cover";
-                document.body.style.backgroundPosition = "center";
-                document.body.style.backgroundAttachment = "fixed";
-            }
         });
     </script>
 
-    
 </body>
-
 </html>
