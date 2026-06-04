@@ -753,12 +753,23 @@
         loadStoriesFiles();
     };
 
+    function closeStoriesIfOpen(callback, delay = 0) {
+        if (currentStoriesLevel) {
+            goBackFromStories();
+            setTimeout(callback, 650);
+        } else if (currentSubject) {
+            goBack();
+            setTimeout(callback, 650);
+        } else {
+            setTimeout(callback, delay);
+        }
+    }
+
     /* ══════════════════════════════
        صفحة جميع المستويات (جديدة)
     ══════════════════════════════ */
     function openLevelsPage() {
-        if (currentSubject) goBack();
-        setTimeout(() => {
+        closeStoriesIfOpen(() => {
             levelTitle.innerText = '🎓 جميع المستويات';
             subjectsContainer.innerHTML = '';
 
@@ -795,13 +806,12 @@
                         </div>
                     </div>`;
             });
-        }, currentSubject ? 600 : 0);
+        });
     }
 
     window.handleOpenLevelsPage = openLevelsPage;
 
     window.handleGoToLevel = function(level) {
-        // find matching level-btn and simulate click
         const btns = document.querySelectorAll('.level-btn');
         let matchBtn = null;
         btns.forEach(b => { if (b.textContent.trim() === level) matchBtn = b; });
@@ -810,8 +820,7 @@
 
     /* ── About Page ── */
     function openAboutPage() {
-        if (currentSubject) goBack();
-        setTimeout(() => {
+        closeStoriesIfOpen(() => {
             levelTitle.innerText = '✨ مرحبًا بكم ✨';
             subjectsContainer.innerHTML = `
                 <div class="col-span-full">
@@ -830,13 +839,12 @@
                         </div>
                     </div>
                 </div>`;
-        }, currentSubject ? 600 : 0);
+        });
     }
 
     /* ── Auth ── */
     function openLogin() {
-        if (currentSubject) goBack();
-        setTimeout(() => {
+        closeStoriesIfOpen(() => {
             levelTitle.innerText = '🔐 تسجيل الدخول';
             subjectsContainer.innerHTML = `
                 <div class="col-span-full flex justify-center">
@@ -847,7 +855,7 @@
                         <button onclick="handleLogin()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-xl hover:bg-green-700 transition-colors">دخول</button>
                     </div>
                 </div>`;
-        }, currentSubject ? 600 : 0);
+        });
     }
 
     async function login() {
