@@ -1179,7 +1179,7 @@
         const box = document.getElementById('teachers-files-box');
         const filtered = currentTeachersFilter === 'all'
             ? allTeachersFiles
-            : allTeachersFiles.filter(f => f.level === currentTeachersFilter);
+            : allTeachersFiles.filter(f => f.level === `level${currentTeachersFilter}`);
         box.innerHTML = '';
         if (!filtered.length) {
             box.innerHTML = `<p class="text-white/40 font-bold text-center py-6 text-lg">👩‍🏫 لا توجد ملفات بعد</p>`;
