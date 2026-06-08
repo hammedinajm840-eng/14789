@@ -791,6 +791,8 @@
             teachersPage.style.filter = 'blur(5px)';
             teachersPage.style.pointerEvents = 'none';
         }
+        // دائماً أعد homePage لحالته الطبيعية
+        homePage.classList.remove('slide-out-right');
     }
 
     window.handleOpenStoriesPage = function() {
@@ -896,17 +898,10 @@
     };
 
     function closeStoriesIfOpen(callback, delay = 0) {
-        if (currentStoriesLevel) {
-            goBackFromStories();
-            setTimeout(callback, 650);
-        } else if (currentGamesLevel) {
-            goBackFromGames();
-            setTimeout(callback, 650);
-        } else if (currentResearchLevel) {
-            goBackFromResearch();
-            setTimeout(callback, 650);
-        } else if (currentSubject) {
-            goBack();
+        const teachersOpen = teachersPage && teachersPage.style.opacity === '1';
+        if (currentStoriesLevel || currentGamesLevel || currentResearchLevel || teachersOpen || currentSubject) {
+            closeAllSubPages();
+            if (currentSubject) goBack();
             setTimeout(callback, 650);
         } else {
             setTimeout(callback, delay);
