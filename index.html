@@ -614,7 +614,7 @@
                     filesBox.innerHTML += `
                         <div class="file-item bg-white/10 border border-white/15 rounded-xl px-5 py-3 flex justify-between items-center gap-3"
                              style="animation-delay:${i*0.06}s">
-                            <p class="font-bold text-white text-sm overflow-hidden whitespace-nowrap text-ellipsis max-w-[55%]" title="${file.name}">
+                            <p class="font-bold text-white text-sm break-words flex-1" title="${file.name}">
                                 📄 ${file.name}
                             </p>
                             <div class="flex gap-2 flex-shrink-0">
@@ -1215,7 +1215,7 @@
             box.innerHTML += `
                 <div class="file-item bg-white/10 border border-white/15 rounded-xl px-5 py-3 flex justify-between items-center gap-3" style="animation-delay:${i*0.05}s">
                     <div class="overflow-hidden">
-                        <p class="font-black text-white text-sm whitespace-nowrap text-ellipsis overflow-hidden max-w-[200px]" title="${file.name}">👩‍🏫 ${file.name}</p>
+                        <p class="font-bold text-white text-sm break-words" title="${file.name}">
                         ${levelLabel ? `<span class="text-xs text-green-300 font-bold">${levelLabel}</span>` : ''}
                     </div>
                     <div class="flex gap-2 flex-shrink-0">
